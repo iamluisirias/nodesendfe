@@ -4,19 +4,22 @@ import Layout from '../components/Layout';
 import * as yup from 'yup'
 import ErrorForm from '../components/ErrorForm';
 
-const Home = () => {
+const Login = () => {
 
+    //Manejando el state del formulario.
     const formik = useFormik({
         initialValues: {
             email: '',
             password: ''
         },
 
+        //Que campos y como se validaran esos campos.
         validationSchema: yup.object({
             email: yup.string().required('Ingrese un correo').email('Correo no válido'),
             password: yup.string().required('Ingrese su contraseña')
         }),
 
+        //Que se hará una vez haya pasado la validación y se envíe el formulario.
         onSubmit: datos => {
             console.log(datos);
         }
@@ -93,4 +96,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default Login;
