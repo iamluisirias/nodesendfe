@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import Layout from '../components/Layout';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import ErrorForm from '../components/ErrorForm';
 
+//usando el context para acceder al state global.
+import AuthContext from '../context/auth/authContext';
+import Alerta from '../components/Alerta';
+
 const Registro = () => {
+
+    //Accediendo al state centralizado.
+    const authContext = useContext(AuthContext); 
+    const { mensaje, registrarUsuario } = authContext;
 
     //El orden importa, primero los valores iniciales, luego la validacion y luego el submit
     const formik = useFormik({
@@ -23,7 +31,7 @@ const Registro = () => {
         }),
 
         onSubmit: datos => {
-            console.log(datos);
+            registrarUsuario(datos);
         }
     })
 
@@ -31,6 +39,10 @@ const Registro = () => {
         <Layout>
            <div className="md:w-4/5 xl:w-3/5 mx-auto mb-32">
                 <h2 className="text-4xl font-sans font-bold text-gray-800 text-center my-4">Crea tu cuenta</h2>
+
+                {
+                    mensaje ? <Alerta/> : null
+                }
 
                 <div className="flex justify-center mt-5">
                     <div className="w-full max-w-lg">

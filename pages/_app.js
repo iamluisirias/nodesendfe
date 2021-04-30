@@ -3,7 +3,7 @@ import AuthState from '../context/auth/authState';
 
 const MyApp = ({ Component, pageProps }) => {
   return (
-    <AuthState>
+    <AuthState>     {/* Se consume el provider del context. */}
       <Component {...pageProps}/>
     </AuthState>
   )
