@@ -1,10 +1,32 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useFormik } from 'formik';
 import Layout from '../components/Layout';
 import * as yup from 'yup'
 import ErrorForm from '../components/ErrorForm';
+import Alerta from '../components/Alerta';
+
+//Context
+import AuthContext from '../context/auth/authContext';
+
+//Next Router
+import { useRouter } from 'next/router';
 
 const Login = () => {
+
+    //Accediendo al state local
+    const authContext = useContext(AuthContext);
+
+    const { mensaje, autenticado, iniciarSesion } = authContext;
+
+    //Hook del router de next.
+    const router = useRouter();
+
+    //Manejando los cambios en la autenticación.
+    useEffect(() => {
+        if(autenticado){
+            router.push('/')
+        }
+    }, [autenticado])
 
     //Manejando el state del formulario.
     const formik = useFormik({
@@ -21,7 +43,7 @@ const Login = () => {
 
         //Que se hará una vez haya pasado la validación y se envíe el formulario.
         onSubmit: datos => {
-            console.log(datos);
+            iniciarSesion(datos);
         }
     });
 
@@ -31,6 +53,10 @@ const Login = () => {
                 <h1  
                     className="text-4xl font-sans font-bold text-gray-800 text-center my-4"
                 >Inicia Sesión</h1>
+
+                {
+                    mensaje && <Alerta/>
+                }
 
                 <div className="flex justify-center mt-5">
                     <div className="w-full max-w-lg">
