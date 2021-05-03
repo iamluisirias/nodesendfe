@@ -2,13 +2,19 @@ import React, { useContext, useEffect } from 'react';
 import Link from 'next/link';
 import Layout from '../components/Layout';
 import AuthContext from '../context/auth/authContext';
+import AppContext from '../context/app/appContext';
 
 import Dropzone from '../components/Dropzone';
+import Alerta from '../components/Alerta';
 
 const Home = () => {
 
   const authContext = useContext(AuthContext);
   const { obtenerUsuarioAutenticado } = authContext;
+
+  const appContext = useContext(AppContext);
+  const { msg } = appContext;
+
 
   useEffect(() => {
     obtenerUsuarioAutenticado();
@@ -17,6 +23,9 @@ const Home = () => {
   return (
     <Layout>
       <div className="md:w-4/5 xl:w-3/5 mx-auto mb-32">
+        {
+          msg && <Alerta/>
+        }
         <div className="lg:flex md:shadow-lg p-5 bg-white rounded-lg py-10">
           <Dropzone/>
            

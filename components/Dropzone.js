@@ -1,29 +1,23 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { useDropzone } from 'react-dropzone';
-import clienteAxios from '../config/axios';
+import AppContext from '../context/app/appContext';
 
 const Dropzone = () => {
 
-    //Manejando el archivo al moento del drop
-    //useCallback es utilizado para evitar multiples renders del componente a medida de que ocurre un cambio en el archivo subido nitampoco cuando se esté subiendo
-    const onDropAccepted = useCallback( async acceptedFiles => {
-        console.log(acceptedFiles);
+    //Accediendo al state global
+    const appContext = useContext(AppContext);
+    const { cargando, mostrarAlerta, subirArchivo } = appContext;
 
-        //Creando un formData
-        const formData = new FormData();
-        await formData.append('archivo', acceptedFiles[0]);       //Se llama archivo y quiero guardar solo 1.
-
-        try {
-            const resultado = await clienteAxios.post('/api/archivos', formData);
-            console.log(resultado);
-        } catch (error) { 
-            console.log(error.response)
-        }
-    }, []);
-
+    //Manejando el archivo al momento del drop
     const onDropRejected = () => {
-        console.log('Archivo rechazado')
-    }
+        mostrarAlerta('Archivo Rechazado, el límite es de 1MB, crea una cuenta y obtén el beneficio de subir archivos más grandes.');
+    };
+
+    //useCallback es utilizado para evitar multiples renders del componente a medida de que ocurre un cambio en el archivo subido nitampoco cuando se esté subiendo
+    const onDropAccepted = useCallback( acceptedFiles => {
+        //En caso de pasar las validaciones de dropzone, se sube el archivo
+        subirArchivo(acceptedFiles[0]);
+    }, []);
 
     //Extraer contenido de dropzone
     const { getRootProps, getInputProps, isDragActive, acceptedFiles } = useDropzone({ onDropAccepted, onDropRejected, maxSize: 1000000 });
@@ -57,13 +51,22 @@ const Dropzone = () => {
                             { archivos }
                         </ul>
 
-                        <button 
-                            type="button"
-                            className="bg-blue-700 w-full py-3 rounded text-white my-10 hover:bg-blue-800" 
-                            onClick={() => crearEnlace() }
-                        >
-                            Crear Enlace
-                        </button>
+                        {
+                            cargando ? 
+                                <p
+                                    className="my-10 text-center text-gray-600"
+                                >Subiendo archivo...</p> 
+                            : 
+                                <button 
+                                    type="button"
+                                    className="bg-blue-700 w-full py-3 rounded text-white my-10 hover:bg-blue-800" 
+                                    onClick={() => crearEnlace() }
+                                >
+                                    Crear Enlace
+                                </button>
+                        }
+
+                        
                    </div>
                 ) 
                 :  
