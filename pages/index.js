@@ -15,9 +15,13 @@ const Home = () => {
   const appContext = useContext(AppContext);
   const { msg, url } = appContext;
 
-
   useEffect(() => {
-    obtenerUsuarioAutenticado();
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      obtenerUsuarioAutenticado()
+    }
+    
   },[])
 
   return (

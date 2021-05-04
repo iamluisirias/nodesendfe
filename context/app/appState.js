@@ -11,7 +11,9 @@ import {
     SUBIR_ARCHIVO_ERROR,
     CREAR_ENLACE_EXITO,
     CREAR_ENLACE_ERROR,
-    LIMPIAR_STATE
+    LIMPIAR_STATE,
+    AGREGAR_PASSWORD,
+    AGREGAR_DESCARGAS
 } from '../../types'
 
 
@@ -107,6 +109,21 @@ const AppState = ({ children }) => {
         })
     }
 
+    //Agregar una contraseña a un archivo.
+    const agregarPassword = password => {
+        dispatch({
+            type: AGREGAR_PASSWORD,
+            payload: password
+        });
+    }
+
+    const agregarNumeroDescargas = descargas => {
+        dispatch({
+            type: AGREGAR_DESCARGAS,
+            payload: descargas
+        })
+    }
+
     return (
         <AppContext.Provider
             value={{
@@ -121,7 +138,9 @@ const AppState = ({ children }) => {
                 mostrarAlerta,
                 subirArchivo,
                 crearEnlace,
-                limpiarState
+                limpiarState,
+                agregarPassword,
+                agregarNumeroDescargas
             }}
         >
             { children }

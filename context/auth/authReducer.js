@@ -34,7 +34,8 @@ const reducer = ( state, action ) => {
         case OBTENER_USUARIO:
             return {
                 ...state,
-                usuario: action.payload
+                usuario: action.payload,
+                autenticado: true
             }
         
         case CERRAR_SESION:

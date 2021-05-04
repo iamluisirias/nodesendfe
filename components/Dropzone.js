@@ -1,12 +1,18 @@
 import React, { useCallback, useContext } from 'react';
 import { useDropzone } from 'react-dropzone';
 import AppContext from '../context/app/appContext';
+import AuthContext from '../context/auth/authContext';
+import Formulario from './Formulario';
 
 const Dropzone = () => {
 
     //Accediendo al state global
     const appContext = useContext(AppContext);
     const { cargando, mostrarAlerta, subirArchivo, crearEnlace } = appContext;
+
+    //Accediendo al usuario autenticado en caso de haberlo.
+    const authContext = useContext(AuthContext);
+    const { usuario, autenticado } = authContext;
 
     //Manejando el archivo al momento del drop
     const onDropRejected = () => {
@@ -46,6 +52,10 @@ const Dropzone = () => {
                         <ul>
                             { archivos }
                         </ul>
+
+                        {
+                            autenticado && <Formulario/> 
+                        }
 
                         {
                             cargando ? 
