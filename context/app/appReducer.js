@@ -6,6 +6,7 @@ import {
     SUBIR_ARCHIVO_ERROR,
     CREAR_ENLACE_EXITO,
     CREAR_ENLACE_ERROR,
+    LIMPIAR_STATE,
     
 } from '../../types'
 
@@ -38,7 +39,31 @@ const reducer = ( state, action ) => {
                 msg: action.payload,
                 cargando: false
             }
-    
+        
+        case CREAR_ENLACE_EXITO:
+            return {
+                ...state,
+                url: action.payload
+            }    
+        
+        case CREAR_ENLACE_ERROR:
+            return {
+                ...state
+            }   
+            
+        case LIMPIAR_STATE: 
+            return {
+                ...state,
+                msg: null,
+                nombre: '',
+                nombre_original: '',
+                cargando: null,
+                descargas: 1,
+                password: '',
+                autor: null,
+                url: ''
+            }    
+
         default:
             return state;
     }

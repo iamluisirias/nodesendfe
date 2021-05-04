@@ -6,7 +6,7 @@ const Dropzone = () => {
 
     //Accediendo al state global
     const appContext = useContext(AppContext);
-    const { cargando, mostrarAlerta, subirArchivo } = appContext;
+    const { cargando, mostrarAlerta, subirArchivo, crearEnlace } = appContext;
 
     //Manejando el archivo al momento del drop
     const onDropRejected = () => {
@@ -33,10 +33,6 @@ const Dropzone = () => {
             <p className="text-sm text-gray-500">{ ( archivo.size / Math.pow(1024, 2) ).toFixed(2) } MB</p>
         </li>
     ) );
-
-    const crearEnlace = () => {
-        console.log('Creando el enlace...');
-    }
 
     return (
         <div 
