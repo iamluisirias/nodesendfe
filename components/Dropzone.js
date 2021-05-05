@@ -14,8 +14,20 @@ const Dropzone = () => {
     const authContext = useContext(AuthContext);
     const { usuario, autenticado } = authContext;
 
+    //Definiendo tamaño maximo de un archivo depediendo si el usuario tiene una cuenta o no.
+    let tamanoMax = 1048576;
+
+    if (usuario) {
+        tamanoMax = 10485760;
+    }
+
     //Manejando el archivo al momento del drop
     const onDropRejected = () => {
+        if (usuario) {
+            mostrarAlerta('El limite de un archivo es de 10MB');
+            return
+        }
+
         mostrarAlerta('Archivo Rechazado, el límite es de 1MB, crea una cuenta y obtén el beneficio de subir archivos más grandes.');
     };
 
@@ -26,7 +38,7 @@ const Dropzone = () => {
     }, []);
 
     //Extraer contenido de dropzone
-    const { getRootProps, getInputProps, isDragActive, acceptedFiles } = useDropzone({ onDropAccepted, onDropRejected, maxSize: 1000000 });
+    const { getRootProps, getInputProps, isDragActive, acceptedFiles } = useDropzone({ onDropAccepted, onDropRejected, maxSize: tamanoMax });
 
     const archivos = acceptedFiles.map( archivo => (
         <li 
@@ -66,7 +78,7 @@ const Dropzone = () => {
                                 <button 
                                     type="button"
                                     className="bg-blue-700 w-full py-3 rounded text-white my-10 hover:bg-blue-800" 
-                                    onClick={() => crearEnlace() }
+                                    onClick={ () => crearEnlace() }
                                 >
                                     Crear Enlace
                                 </button>

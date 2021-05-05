@@ -26,8 +26,7 @@ const AppState = ({ children }) => {
         cargando: null,
         descargas: 1,
         password: '',
-        autor: null,
-        url: ''
+        url: '',
     };
 
     const [ state, dispatch ] = useReducer(AppReducer, initialState);
@@ -83,8 +82,7 @@ const AppState = ({ children }) => {
             nombre: state.nombre,
             nombre_original: state.nombre_original,
             descargas: state.descargas,
-            password: state.password,
-            autor: state.autor
+            password: state.password
         }
 
         try {
@@ -133,7 +131,6 @@ const AppState = ({ children }) => {
                 cargando: state.cargando,
                 descargas: state.descargas,
                 password: state.password,
-                autor: state.autor,
                 url: state.url,
                 mostrarAlerta,
                 subirArchivo,

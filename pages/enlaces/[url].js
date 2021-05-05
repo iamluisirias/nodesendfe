@@ -6,14 +6,16 @@ import AppContext from '../../context/app/appContext';
 import Alerta from '../../components/Alerta';
 
 export async function getServerSideProps({ params }) {
-    //Se extrae de lo que se manda en el path de abajo.
+    //Se extrae de lo que se manda como params en el path de abajo.
     const { url } = params;
 
+    //Se comprueba si un enlace fue protegido con un password.
     const resultado = await clienteAxios.get(`/api/enlaces/${url}`);
+    //console.log(resultado.data);
 
     return {
         props: {
-            url: resultado.data
+            dataEnlace: resultado.data     //Se envía como prop si fue protegido con password y el enlace al que hace referencia.
         }
     }
 }
@@ -29,20 +31,21 @@ export async function getServerSidePaths() {
     }
 }
 
-const URL = ({ url }) => {
+const URL = ({ dataEnlace }) => {
+
     //Accediendo al state global
     const appContext = useContext(AppContext);
     const { msg, mostrarAlerta } = appContext;
 
-    //Destructuring de la respuesta que se recibe al hacer un get a /api/usuarios/:url
-    //Se recibe si el enlace esta protegido o no con una contraseña y el enlace de la página de donde está ese archivo protegido.
-    const { enlace, password } = url;
+    //Destructuring de la respuesta que se recibe al hacer un get a /api/enlaces/:url
+    //Se recibe si el enlace esta protegido o no con una contraseña y el enlace que hace referencia al archivo.
+    const { enlace, password, archivo } = dataEnlace;
 
     //state local
     const [ passHabilitada, habilitarPassword ] = useState(password);   //Se define la respuesta del req como state inicial de si la contrasena se habilita o no.
-    const [ archivo, setArchivo ] = useState(null);
 
     const [ passwordForm, setPassword ] = useState('');
+    const [ archivostate, setArchivo ] = useState(archivo)
 
     const verificarPassword = async e => {
         e.preventDefault();
@@ -53,8 +56,9 @@ const URL = ({ url }) => {
 
         try {
             const resultado = await clienteAxios.post(`/api/enlaces/${enlace}`, data);
-            //guardamos el archivo de respuesta en el state.
-            setArchivo(resultado.data.archivo); 
+            
+            //Tomando ese resultado y añaadiendo ese archivo al state
+            setArchivo(resultado.data.archivo);
 
             //Deshabilitando la password, en caso de que no tenga o se haya ingresado correctamente.
             habilitarPassword(resultado.data.password);
@@ -112,7 +116,7 @@ const URL = ({ url }) => {
                         <div className="bg-white rounded shadow-md px-8 pt-6 pb-8 mb-4 mt-8">
                             <h1 className="text-4xl text-center text-gray-700">Descarga el archivo</h1>
                             <div className="flex items-center justify-center mt-10">
-                                <a href={`${process.env.backendURL}/api/archivos/${archivo}`} className="bg-red-500 text-center px-10 py-3 rounded uppercase font-bold text-white cursor-pointer">Aquí</a>
+                                <a href={`${process.env.backendURL}/api/archivos/${archivostate}`} className="bg-red-500 text-center px-10 py-3 rounded uppercase font-bold text-white cursor-pointer">Aquí</a>
             
                             </div>
                         </div>

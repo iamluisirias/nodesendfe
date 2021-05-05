@@ -62,7 +62,6 @@ const reducer = ( state, action ) => {
                 cargando: null,
                 descargas: 1,
                 password: '',
-                autor: null,
                 url: ''
             }    
         
